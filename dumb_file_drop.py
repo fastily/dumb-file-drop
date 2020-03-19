@@ -15,7 +15,7 @@ UPLOAD_FOLDER.mkdir(parents=True, exist_ok=True)
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
-
+    """Endpoint which processes a file upload"""
     if not request.method == "POST":
         return render_template("index.html")
 
@@ -31,13 +31,12 @@ def upload_file():
     elif not file.filename.lower().endswith((".mov", "mp4", "txt")):
         flash('ERROR: Invalid file type')
     else:
-        # print(f"Made it here: {file.filename}")
-        # filename = secure_filename(file.filename)
-
-        # print(f"Saving to {os.path.join(UPLOAD_FOLDER, filename)}")
         file.save(UPLOAD_FOLDER / secure_filename(file.filename))
+        print(f"{file.filename} successfully uploaded!")
         flash("Success!")
+
     return redirect(request.url)
 
 
-app.run("0.0.0.0")
+if __name__ == '__main__':
+    app.run("0.0.0.0", debug=True)
