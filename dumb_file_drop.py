@@ -33,7 +33,7 @@ def upload_file():
     else:
         file.save(UPLOAD_FOLDER / secure_filename(file.filename))
         print(f"{file.filename} successfully uploaded!")
-        flash("Success!")
+        flash(f"Successfully uploaded {file.filename}! 🐱")
 
     return redirect(request.url)
 
