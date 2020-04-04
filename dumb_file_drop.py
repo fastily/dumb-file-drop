@@ -28,8 +28,6 @@ def upload_file():
     # if user does not select file, browser also submit an empty part without filename
     if not file or not file.filename:
         flash('ERROR: No file uploaded')
-    elif not file.filename.lower().endswith((".mov", "mp4", "txt")):
-        flash('ERROR: Invalid file type')
     else:
         file.save(UPLOAD_FOLDER / secure_filename(file.filename))
         print(f"{file.filename} successfully uploaded!")
