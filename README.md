@@ -8,7 +8,7 @@ Files will be uploaded to `./uploads`
 
 Run:
 ```bash
-python dump_file_drop.py
+python dumb_file_drop.py
 ```
 
 Endpoint: [localhost:5000](http://localhost:5000)
