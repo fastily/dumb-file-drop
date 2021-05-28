@@ -7,15 +7,14 @@ from werkzeug.utils import secure_filename
 
 
 app = Flask(__name__)
-app.secret_key = "super secret key"
+app.secret_key = "srs bsnz"
 
-UPLOAD_FOLDER = Path("./uploads")
-UPLOAD_FOLDER.mkdir(parents=True, exist_ok=True)
+(UPLOAD_FOLDER := Path("./uploads")).mkdir(parents=True, exist_ok=True)
 
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
-    """Endpoint which processes a file upload"""
+    """Endpoint which processes a file upload or shows the upload form"""
     if not request.method == "POST":
         return render_template("index.html")
 
@@ -23,6 +22,7 @@ def upload_file():
     if 'theFile' not in request.files:
         flash('ERROR: No file part')
         return redirect(request.url)
+
     file = request.files['theFile']
 
     # if user does not select file, browser also submit an empty part without filename
@@ -36,5 +36,10 @@ def upload_file():
     return redirect(request.url)
 
 
+def _main() -> None:
+    """Main driver to be run if this script is invoked directly."""
+    app.run("0.0.0.0")
+
+
 if __name__ == '__main__':
-    app.run("0.0.0.0", debug=True)
+    _main()

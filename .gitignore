@@ -18,3 +18,6 @@ dist
 
 # generated files
 uploads
+
+venv_dumb_file_drop
+scratch.py
