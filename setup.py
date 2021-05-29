@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="dumb_file_drop",
+    name="dumb-file-drop",
     version="0.0.1",
     author="Fastily",
     author_email="fastily@users.noreply.github.com",
