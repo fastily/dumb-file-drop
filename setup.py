@@ -8,7 +8,7 @@ setuptools.setup(
     version="0.0.1",
     author="Fastily",
     author_email="fastily@users.noreply.github.com",
-    description="A simple webserver-based drop box which allows files uploads.  Good for quickly sharing files on your local network.",
+    description="A simple webserver-based drop box which allows file uploads.  Good for quickly sharing files on your local network.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/fastily/dumb-file-drop",

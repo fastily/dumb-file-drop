@@ -6,11 +6,20 @@ Simple webserver which allows files to be uploaded to it.  Good for quickly shar
 
 Files will be uploaded to `./uploads`
 
-Run:
+## Install
 ```bash
+pip install dumb-file-drop
+```
+
+## Run
+```bash
+# invoked directly from source
 python -m dumb_file_drop
+
+# if installed as a package
+dfd
 ```
 
 Endpoint: [localhost:5000](http://localhost:5000)
 
-⚠️ Do not run this on public/untrusted networks!  There's no built-in authentication, so anybody could upload files to your computer!
+⚠️ Do not use this on public/untrusted networks!  There's no built-in authentication, so anybody could upload files to your computer!
