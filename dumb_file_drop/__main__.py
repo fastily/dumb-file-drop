@@ -1,10 +1,13 @@
 """Simple server which accepts video file uploads"""
 
+import logging
+
 from pathlib import Path
 
 from flask import Flask, flash, request, redirect, render_template
 from werkzeug.utils import secure_filename
 
+log = logging.getLogger(__name__)
 
 app = Flask(__name__)
 app.secret_key = "srs bsnz"
@@ -18,19 +21,11 @@ def upload_file():
     if not request.method == "POST":
         return render_template("index.html")
 
-    # check if the post request has the file part
-    if 'theFile' not in request.files:
-        flash('ERROR: No file part')
-        return redirect(request.url)
-
-    file = request.files['theFile']
-
-    # if user does not select file, browser also submit an empty part without filename
-    if not file or not file.filename:
+    if not (file := request.files.get('theFile')) or not file.filename:  # handle case where user submits empty form
         flash('ERROR: No file uploaded')
     else:
         file.save(UPLOAD_FOLDER / secure_filename(file.filename))
-        print(f"{file.filename} successfully uploaded!")
+        log.info("'%s' was uploaded", file.filename)
         flash(f"Successfully uploaded {file.filename}! 🐱")
 
     return redirect(request.url)
@@ -38,6 +33,11 @@ def upload_file():
 
 def _main() -> None:
     """Main driver to be run if this script is invoked directly."""
+    handler = logging.StreamHandler()
+    handler.setFormatter(logging.Formatter("{asctime}: {levelname}: {message}", "%Y-%m-%d %H:%M:%S", "{"))
+    log.addHandler(handler)
+    log.setLevel(logging.INFO)
+
     app.run("0.0.0.0")
 
 
