@@ -38,7 +38,7 @@ def _main() -> None:
     log.addHandler(handler)
     log.setLevel(logging.INFO)
 
-    app.run("0.0.0.0")
+    app.run("0.0.0.0", 8000)
 
 
 if __name__ == '__main__':

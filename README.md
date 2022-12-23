@@ -20,6 +20,6 @@ python -m dumb_file_drop
 dfd
 ```
 
-Endpoint: [localhost:5000](http://localhost:5000)
+Endpoint: [localhost:8000](http://localhost:8000)
 
 ⚠️ Do not use this on public/untrusted networks!  There's no built-in authentication, so anybody could upload files to your computer!
