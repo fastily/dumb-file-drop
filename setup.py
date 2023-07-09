@@ -17,7 +17,7 @@ setuptools.setup(
     },
     include_package_data=True,
     packages=setuptools.find_packages(include=["dumb_file_drop"]),
-    install_requires=["Flask"],
+    install_requires=["aiofiles", "fastapi[all]", "gunicorn", "rich"],
     entry_points={
         'console_scripts': [
             'dfd = dumb_file_drop.__main__:_main'

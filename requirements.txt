@@ -1,1 +1,4 @@
-Flask==2.3.2
+aiofiles==23.1.0
+fastapi[all]==0.100.0
+gunicorn==20.1.0
+rich==13.4.2

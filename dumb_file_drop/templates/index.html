@@ -29,8 +29,8 @@
                         <div class="card-body">
                             <form method="POST" enctype="multipart/form-data">
                                 <div class="my-3">
-                                    <label for="theFile" class="form-label">Select file to upload</label>
-                                    <input type="file" class="form-control" id="theFile" name="theFile" @change="fileFieldChange">
+                                    <label for="f" class="form-label">Select file to upload</label>
+                                    <input type="file" class="form-control" id="f" name="f" @change="fileFieldChange">
                                 </div>
                                 <div class="d-grid gap-2 col-6 mx-auto mt-5 mb-3">
                                     <input class="btn btn-primary" type=submit value=Upload @click.prevent="doUpload" :disabled="noFiles || uploadInProgress">
@@ -63,7 +63,7 @@
     <script type="importmap">
         {
           "imports": {
-            "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+            "vue": "https://cdnjs.cloudflare.com/ajax/libs/vue/3.3.4/vue.esm-browser.prod.min.js"
           }
         }
     </script>
@@ -82,7 +82,7 @@
             },
             methods: {
                 async doUpload() {
-                    const fileToUpload = document.getElementById('theFile').files[0];
+                    const fileToUpload = document.getElementById('f').files[0];
                     if (this.currentFileName == fileToUpload.name) {
                         this.message = `⚠️ You already uploaded '${this.currentFileName}'!`
                         return
@@ -92,7 +92,7 @@
                     this.uploadInProgress = true;
 
                     try {
-                        await axios.post('/', { "theFile": fileToUpload }, {
+                        await axios.post('/', { "f": fileToUpload }, {
                             onUploadProgress: this.onUploadProgress,
                             headers: { 'Content-Type': 'multipart/form-data' }
                         });
