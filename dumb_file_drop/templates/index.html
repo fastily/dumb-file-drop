@@ -33,14 +33,14 @@
                                     <input type="file" class="form-control" id="f" name="f" @change="fileFieldChange">
                                 </div>
                                 <div class="d-grid gap-2 col-6 mx-auto mt-5 mb-3">
-                                    <input class="btn btn-primary" type=submit value=Upload @click.prevent="doUpload" :disabled="noFiles || uploadInProgress">
+                                    <input class="btn btn-primary" type=submit value=Upload @click.prevent="doUpload" :disabled="uploadButtonDisabled">
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row mt-4" v-if="uploadInProgress || message">
+            <div class="row mt-4" v-if="showProgressBar">
                 <div class="col-md-6 mx-auto">
                     <div class="progress" role="progressbar">
                         <div class="progress-bar" :style="{width: uploadProgress + '%'}">{{uploadProgress}}%</div>
@@ -48,7 +48,7 @@
                 </div>
             </div>
 
-            <div class="container" v-if="message">
+            <div class="container" v-if="showMessage">
                 <div class="alert alert-info show my-3" role="alert">
                     {{ message }}
                 </div>
@@ -73,40 +73,42 @@
         createApp({
             data() {
                 return {
-                    uploadInProgress: false,
-                    noFiles: true,
                     uploadProgress: 0,
-                    currentFileName: "",
+                    uploadButtonDisabled: true,
+                    showMessage: false,
+                    showProgressBar: false,
                     message: ""
                 }
             },
             methods: {
                 async doUpload() {
                     const fileToUpload = document.getElementById('f').files[0];
-                    if (this.currentFileName == fileToUpload.name) {
-                        this.message = `⚠️ You already uploaded '${this.currentFileName}'!`
+
+                    this.uploadButtonDisabled = true;
+
+                    if ((await axios.get('/file-exists', { params: { fn: fileToUpload.name } })).data.detail) {
+                        this.message = `⚠️ You already uploaded '${fileToUpload.name}'!`
+                        this.showMessage = true;
                         return
                     }
 
-                    this.currentFileName = fileToUpload.name;
-                    this.uploadInProgress = true;
+                    this.showMessage = false;
+                    this.showProgressBar = true;
 
                     try {
-                        await axios.post('/', { "f": fileToUpload }, {
-                            onUploadProgress: this.onUploadProgress,
-                            headers: { 'Content-Type': 'multipart/form-data' }
-                        });
-
-                        this.message = `✅ Successfully uploaded '${this.currentFileName}'`;
+                        await axios.post('/', { "f": fileToUpload }, { onUploadProgress: this.onUploadProgress, headers: { 'Content-Type': 'multipart/form-data' } });
+                        this.message = `✅ Successfully uploaded '${fileToUpload.name}'`;
                     }
                     catch (e) {
                         console.log(e);
                         this.message = e.message;
                     }
-                    this.uploadInProgress = false;
+
+                    this.showMessage = true;
                 },
                 fileFieldChange(e) {
-                    this.noFiles = !e.target.files.length;
+                    if (e.target.files.length)
+                        this.uploadButtonDisabled = false;
                 },
                 onUploadProgress(e) {
                     this.uploadProgress = Math.round((e.loaded * 100) / e.total);

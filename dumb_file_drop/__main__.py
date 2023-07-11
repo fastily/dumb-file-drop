@@ -7,7 +7,7 @@ from pathlib import Path
 import aiofiles
 import uvicorn
 
-from fastapi import FastAPI, Request, UploadFile
+from fastapi import FastAPI, HTTPException, Request, UploadFile
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from rich.logging import RichHandler
@@ -15,19 +15,49 @@ from rich.logging import RichHandler
 _CHUNK_SIZE = 1024 * 1024 * 4
 
 log = logging.getLogger(__name__)
+log.addHandler(RichHandler(rich_tracebacks=True))
+log.setLevel(logging.INFO)
+
 app = FastAPI(title="Dumb File Drop", docs_url=None, redoc_url=None)
-templates = Jinja2Templates(directory="dumb_file_drop/templates")
+
+templates = Jinja2Templates("dumb_file_drop/templates")
 (UPLOAD_FOLDER := Path("./uploads")).mkdir(parents=True, exist_ok=True)
 
 
+def _sanitize_filename(fn: str) -> Path:
+    """Convenience method, sanitizes file names and prefixes the return value with the `UPLOAD_FOLDER`
+
+    Args:
+        fn (str): The filename to sanitize
+
+    Returns:
+        Path: `fn`, sanitized and prefixed with `UPLOAD_FOLDER`.
+    """
+    return UPLOAD_FOLDER / fn.replace("/", "_").replace(":", "-")
+
+
+@app.get("/file-exists")
+async def file_exists(fn: str) -> dict[str, bool]:
+    """Checks if a file with this name is already on the server.
+
+    Args:
+        fn (str): The name of the file to check
+
+    Returns:
+        dict[str, bool]: Some JSON indicating if the resopnse was successful.
+    """
+    print(_sanitize_filename(fn))
+    return {"detail": _sanitize_filename(fn).is_file()}
+
+
 @app.get("/")
-async def get_index(request: Request) -> HTMLResponse:
+async def show_index(request: Request) -> HTMLResponse:
     """Shows the web UI"""
     return templates.TemplateResponse("index.html", {"request": request})
 
 
 @app.post("/")
-async def post_index(f: UploadFile) -> dict[str, str]:
+async def upload(f: UploadFile) -> dict[str, str]:
     """File upload endpoint.
 
     Args:
@@ -36,9 +66,13 @@ async def post_index(f: UploadFile) -> dict[str, str]:
     Returns:
         dict: Some JSON indicating if the operation was successful.
     """
-    log.info("Now uploading '%s'...", sanitized_fn := f.filename.replace("/", "_").replace(":", "-"))
+    log.info("Now uploading '%s'...", sanitized_fn := _sanitize_filename(f.filename))
 
-    async with aiofiles.open(UPLOAD_FOLDER / sanitized_fn, 'wb') as out_file:
+    if sanitized_fn.is_file():
+        log.error("'%s' already exists, abort!", sanitized_fn)
+        raise HTTPException(400, f"File already uploaded: {f.filename}")
+
+    async with aiofiles.open(sanitized_fn, 'wb') as out_file:
         while content := await f.read(_CHUNK_SIZE):
             await out_file.write(content)
 
@@ -47,13 +81,5 @@ async def post_index(f: UploadFile) -> dict[str, str]:
     return {"detail": "OK"}
 
 
-def _main() -> None:
-    """Main driver, to be run if this module is invoked directly."""
-    log.addHandler(RichHandler(rich_tracebacks=True))
-    log.setLevel(logging.INFO)
-
-    uvicorn.run("dumb_file_drop.__main__:app", reload=True)
-
-
 if __name__ == '__main__':
-    _main()
+    uvicorn.run("dumb_file_drop.__main__:app", reload=True)
