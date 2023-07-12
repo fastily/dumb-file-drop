@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="dumb-file-drop",
-    version="0.0.1",
+    version="0.1.0",
     author="Fastily",
     author_email="fastily@users.noreply.github.com",
     description="A simple webserver-based drop box which allows file uploads.  Good for quickly sharing files on your local network.",
@@ -18,11 +18,6 @@ setuptools.setup(
     include_package_data=True,
     packages=setuptools.find_packages(include=["dumb_file_drop"]),
     install_requires=["aiofiles", "fastapi[all]", "gunicorn", "rich"],
-    entry_points={
-        'console_scripts': [
-            'dfd = dumb_file_drop.__main__:_main'
-        ]
-    },
     classifiers=[
         "Natural Language :: English",
         "Programming Language :: Python :: 3",

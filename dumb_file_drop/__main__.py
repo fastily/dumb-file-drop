@@ -46,7 +46,6 @@ async def file_exists(fn: str) -> dict[str, bool]:
     Returns:
         dict[str, bool]: Some JSON indicating if the resopnse was successful.
     """
-    print(_sanitize_filename(fn))
     return {"detail": _sanitize_filename(fn).is_file()}
 
 
@@ -70,7 +69,7 @@ async def upload(f: UploadFile) -> dict[str, str]:
 
     if sanitized_fn.is_file():
         log.error("'%s' already exists, abort!", sanitized_fn)
-        raise HTTPException(400, f"File already uploaded: {f.filename}")
+        raise HTTPException(409, f"File already uploaded: {f.filename}")
 
     async with aiofiles.open(sanitized_fn, 'wb') as out_file:
         while content := await f.read(_CHUNK_SIZE):

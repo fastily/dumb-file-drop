@@ -13,11 +13,11 @@ pip install dumb-file-drop
 
 ## Run
 ```bash
-# invoked directly from source
+# invoking this module directly, runs in debug mode
 python -m dumb_file_drop
 
-# if installed as a package
-dfd
+# prod
+gunicorn -b "0.0.0.0" -w 4 -k uvicorn.workers.UvicornWorker dumb_file_drop.__main__:app
 ```
 
 Endpoint: [localhost:8000](http://localhost:8000)
