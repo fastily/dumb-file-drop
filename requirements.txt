@@ -1,4 +1,4 @@
 aiofiles==23.2.1
-fastapi[all]==0.109.0
+fastapi[all]==0.109.2
 gunicorn==21.2.0
 rich==13.7.0
