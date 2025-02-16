@@ -20,8 +20,8 @@ log.setLevel(logging.INFO)
 
 app = FastAPI(title="Dumb File Drop", docs_url=None, redoc_url=None)
 
-templates = Jinja2Templates("dumb_file_drop/templates")
-(UPLOAD_FOLDER := Path("./uploads")).mkdir(parents=True, exist_ok=True)
+templates = Jinja2Templates(Path(__file__).resolve().parent / "templates")
+(UPLOAD_FOLDER := Path("/tmp/uploads")).mkdir(parents=True, exist_ok=True)
 
 
 def _sanitize_filename(fn: str) -> Path:

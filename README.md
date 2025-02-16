@@ -4,7 +4,7 @@
 
 Simple webserver which allows files to be uploaded to it.  Good for quickly sharing files on your local network.
 
-Files will be uploaded to `./uploads`
+Files will be uploaded to `/tmp/uploads`
 
 ## Install
 ```bash
