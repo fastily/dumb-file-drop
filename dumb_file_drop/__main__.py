@@ -36,6 +36,16 @@ def _sanitize_filename(fn: str) -> Path:
     return UPLOAD_FOLDER / fn.replace("/", "_").replace(":", "-")
 
 
+@app.get("/health")
+async def health() -> dict:
+    """Health check endpoint which returns an empty body 200
+
+    Returns:
+        dict: An empty json object
+    """
+    return {}
+
+
 @app.get("/file-exists")
 async def file_exists(fn: str) -> dict[str, bool]:
     """Checks if a file with this name is already on the server.
