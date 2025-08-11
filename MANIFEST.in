@@ -1,2 +1,0 @@
-include *.md
-include dumb_file_drop/templates/*.html

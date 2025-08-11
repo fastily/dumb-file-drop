@@ -1,6 +1,30 @@
 [build-system]
-requires = [
-    "setuptools>=42",
-    "wheel"
+requires = ["uv_build"]
+build-backend = "uv_build"
+
+[project]
+name = "dumb-file-drop"
+version = "0.1.0"
+dependencies = ["aiofiles", "fastapi[all]", "gunicorn", "rich"]
+requires-python = ">=3.9"
+authors = [{name = "Fastily", email = "fastily@users.noreply.github.com"}]
+description = "A simple webserver-based drop box which allows file uploads. Good for sending files to another device on your local network."
+readme = "README.md"
+license = "GPL-3.0-or-later"
+license-files = ["LICEN[CS]E.*"]
+keywords = ["rar", "zip"]
+classifiers = [
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: OS Independent"
 ]
-build-backend = "setuptools.build_meta"
+
+[project.urls]
+Homepage = "https://github.com/fastily/dumb-file-drop"
+"Bug Tracker" = "https://github.com/fastily/dumb-file-drop/issues"
+
+[tool.uv.build-backend]
+module-name = "dumb_file_drop"
+module-root = ""

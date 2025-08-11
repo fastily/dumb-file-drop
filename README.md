@@ -6,18 +6,16 @@ Simple webserver which allows files to be uploaded to it.  Good for quickly shar
 
 Files will be uploaded to `/tmp/uploads`
 
-## Install
+## Usage
 ```bash
-pip install dumb-file-drop
-```
+# install dependencies
+uv sync --no-install-project
 
-## Run
-```bash
-# invoking this module directly, runs in debug mode
-python -m dumb_file_drop
+# run in debug mode
+uv run python -m dumb_file_drop
 
 # prod
-gunicorn -b "0.0.0.0" -w 4 -k uvicorn.workers.UvicornWorker dumb_file_drop.__main__:app
+uv run gunicorn -w 4 -k uvicorn.workers.UvicornWorker -b "0.0.0.0" dumb_file_drop.__main__:app
 ```
 
 Endpoint: [localhost:8000](http://localhost:8000)
