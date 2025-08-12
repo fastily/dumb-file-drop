@@ -4,7 +4,7 @@ build-backend = "uv_build"
 
 [project]
 name = "dumb-file-drop"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = ["aiofiles", "fastapi[all]", "gunicorn", "rich"]
 requires-python = ">=3.9"
 authors = [{name = "Fastily", email = "fastily@users.noreply.github.com"}]
@@ -12,7 +12,7 @@ description = "A simple webserver-based drop box which allows file uploads. Good
 readme = "README.md"
 license = "GPL-3.0-or-later"
 license-files = ["LICEN[CS]E.*"]
-keywords = ["rar", "zip"]
+keywords = ["dropbox"]
 classifiers = [
     "Natural Language :: English",
     "Programming Language :: Python :: 3",
